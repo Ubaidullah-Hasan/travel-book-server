@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from 'cookie-parser'
 import config from "./app/config";
 import routeNotFound from "./app/middlewares/routeNotFound";
+import AppError from "./app/errors/AppError";
 
 
 const app = express();
