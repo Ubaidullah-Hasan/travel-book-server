@@ -1,8 +1,9 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import router from "./app/routes";
 import cors from "cors";
 import cookieParser from 'cookie-parser'
 import config from "./app/config";
+import routeNotFound from "./app/middlewares/routeNotFound";
 
 
 const app = express();
@@ -20,9 +21,12 @@ app.use(express.json());
 
 app.use("/api/v1", router);
 
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
     res.send('Server in running')
 })
+
+// not found middleware
+app.use(routeNotFound);
 
 
 
