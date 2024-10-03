@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
-import { UserModel } from "./user.model";
 import { catchAsync } from "../../utils/catchAsync";
 import { UserServices } from "./user.services";
 import { sendResponse } from "../../utils/sendResponse";
@@ -16,6 +15,17 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
         message: "User created successfully!",
         data: result
     })
+});
+
+const getAllUsers = catchAsync(async (req, res) => {
+    const users = await UserServices.getAllUsersFromDB(req.query);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Users Retrieved Successfully',
+        data: users,
+    });
 });
 
 
@@ -34,4 +44,5 @@ const getSingleUser = catchAsync(async (req, res) => {
 export const userController = {
     createUser,
     getSingleUser,
+    getAllUsers,
 }
