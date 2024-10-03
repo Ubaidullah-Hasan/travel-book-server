@@ -21,5 +21,5 @@ const getSingleUserFromDB = async (id: string) => {
 export const UserServices = {
     createUser,
     getSingleUserFromDB,
-    getAllUsersFromDB,
+    // getAllUsersFromDB,
 };
