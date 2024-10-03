@@ -1,29 +1,37 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
 import { UserModel } from "./user.model";
+import { catchAsync } from "../../utils/catchAsync";
+import { UserServices } from "./user.services";
+import { sendResponse } from "../../utils/sendResponse";
+import httpStatus from "http-status";
 
-const createUser = async(req: Request, res: Response) => {
-    try {
-        const userInfo = req.body;
-        const result = await UserModel.create(userInfo);
-        res.send(result);
-    } catch (error:any) {
-        console.log(error.message);
-    }
+const createUser = catchAsync(async (req: Request, res: Response) => {
+    const payload = req.body;
 
-}
+    const result = await UserServices.createUser(payload);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "User created successfully!",
+        data: result
+    })
+});
 
-const getAllUser = async (req: Request, res: Response) => {
-    try {
-        const result = await UserModel.find(); 
-        res.send(result);
-    } catch (error: any) {
-        console.log(error.message);
-    }
 
-}
+
+const getSingleUser = catchAsync(async (req, res) => {
+    const user = await UserServices.getSingleUserFromDB(req.params.id);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'User Retrieved Successfully',
+        data: user,
+    });
+});
 
 export const userController = {
     createUser,
-    getAllUser,
+    getSingleUser,
 }
