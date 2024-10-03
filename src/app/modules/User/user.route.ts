@@ -12,7 +12,12 @@ router.post(
 )
 router.get(
     '/', 
-    userController.getAllUser
+    userController.getAllUsers
+)
+
+router.get(
+    '/:id', 
+    userController.getSingleUser
 )
 
 export const userRoutes = router;

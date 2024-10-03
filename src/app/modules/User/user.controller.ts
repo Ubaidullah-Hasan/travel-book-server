@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync";
 import { UserServices } from "./user.services";
