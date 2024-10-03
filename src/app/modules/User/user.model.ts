@@ -5,7 +5,11 @@ import { USER_ROLE, USER_STATUS } from "./user.constant";
 
 const userSchema = new Schema<TUser>(
     {
-        email: { type: String, required: true, unique: true },
+        email: { 
+            type: String, 
+            required: true, 
+            unique: true 
+        },
         name: { type: String, required: true },
         password: { type: String, required: true },
         profilePhoto: { 

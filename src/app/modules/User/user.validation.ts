@@ -4,9 +4,9 @@ import { USER_ROLE, USER_STATUS } from './user.constant';
 
 const createUserValidationSchema = z.object({
     body: z.object({ 
-        email: z.string().email({ message: "Invalid email address" }), 
-        name: z.string().nonempty({ message: "Name is required" }),    
-        password: z.string().min(6, { message: "Password must be at least 6 characters" }),   
+        email: z.string({ message: "Invalid email address" }).email({ message: "Invalid email address" }), 
+        name: z.string({ message: "Name is required" }).nonempty({ message: "Name is required" }),    
+        password: z.string({ message: "Password is required!" }).min(6, { message: "Password must be at least 6 characters" }),   
         profilePhoto: z.string().url().optional(),                     
         role: z.enum([USER_ROLE.ADMIN, USER_ROLE.USER], { message: "Invalid role" }).default(USER_ROLE.USER), 
         status: z.enum([USER_STATUS.ACTIVE, USER_STATUS.BLOCKED], { message: "Invalid status" }).default(USER_STATUS.ACTIVE),      
