@@ -1,7 +1,5 @@
 import { Router } from "express";
-function userRoutes () {
-    console.log("userRoutes")
-}
+import { userRoutes } from "../modules/User/user.route";
 
 const router = Router();
 const modulesRoutes = [

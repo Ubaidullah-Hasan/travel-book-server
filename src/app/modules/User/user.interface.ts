@@ -5,8 +5,7 @@ export type TUser = {
     _id: string,
     email: string,
     name: string,
-    password: string
-    needPasswordChange: boolean,
+    password: string,
     profilePhoto: string,
     role: keyof typeof USER_ROLE;
     status: keyof typeof USER_STATUS;
