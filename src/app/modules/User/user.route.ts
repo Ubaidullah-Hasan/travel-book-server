@@ -10,5 +10,9 @@ router.post(
     validateRequest(userValidation.createUserValidationSchema),
     userController.createUser
 )
+router.get(
+    '/', 
+    userController.getAllUser
+)
 
 export const userRoutes = router;

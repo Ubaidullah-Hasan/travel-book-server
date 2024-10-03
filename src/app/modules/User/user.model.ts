@@ -1,24 +1,31 @@
 import mongoose, { model, Schema } from "mongoose";
 import { TUser } from "./user.interface";
 import { USER_ROLE, USER_STATUS } from "./user.constant";
+import bcrypt from 'bcrypt';
+import config from "../../config";
+
 // import profilePhoto from "../../../assets/user.png"
 
 const userSchema = new Schema<TUser>(
     {
-        email: { 
-            type: String, 
-            required: true, 
-            unique: true 
+        email: {
+            type: String,
+            required: true,
+            unique: true
         },
         name: { type: String, required: true },
-        password: { type: String, required: true },
-        profilePhoto: { 
-            type: String, 
-            default: "../../../assets/user.png" 
+        password: {
+            type: String,
+            required: true,
+            select: false, // সাধারণত পাসওয়ার্ড আড়াল থাকে
+        },
+        profilePhoto: {
+            type: String,
+            default: "../../../assets/user.png"
         },
         role: {
             type: String,
-            enum: [USER_ROLE.ADMIN, USER_ROLE.USER], 
+            enum: [USER_ROLE.ADMIN, USER_ROLE.USER],
             default: USER_ROLE.USER
         },
         status: {
@@ -30,19 +37,19 @@ const userSchema = new Schema<TUser>(
             type: Boolean,
             default: false
         },
-        following: [{ 
-            type: mongoose.Types.ObjectId, 
-            ref: 'User', 
-            default: [] 
+        following: [{
+            type: mongoose.Types.ObjectId,
+            ref: 'User',
+            default: []
         }],
-        followers: [{ 
-            type: mongoose.Types.ObjectId, 
-            ref: 'User', 
-            default: [] 
+        followers: [{
+            type: mongoose.Types.ObjectId,
+            ref: 'User',
+            default: []
         }],
-        mobileNumber: { 
-            type: String, 
-            default: "" 
+        mobileNumber: {
+            type: String,
+            default: ""
         },
         isDeleted: { type: Boolean, default: false },
     },
@@ -50,5 +57,34 @@ const userSchema = new Schema<TUser>(
         timestamps: true,
     }
 )
+
+
+userSchema.pre("save", async function (next) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const user = this;
+
+    user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt_rounds));
+
+    next();
+});
+
+userSchema.post("save", function (result, next) {
+
+    result.password = ""
+    next();
+})
+
+userSchema.statics.isUserExistsByEmail = async (email:string) => {
+    // PASSWORD SHOW =>  UserModel.select("+password")
+    // PASSWORD HIDE =>  UserModel.select("-password")
+    return await UserModel.findOne({ email }).select("+password");
+}
+
+userSchema.statics.isPasswordMatched = async function (
+    plainTextPassword,
+    hashedPassword
+) {
+    return await bcrypt.compare(plainTextPassword, hashedPassword);
+};
 
 export const UserModel = model<TUser>("User", userSchema); 

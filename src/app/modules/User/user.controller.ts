@@ -13,6 +13,17 @@ const createUser = async(req: Request, res: Response) => {
 
 }
 
+const getAllUser = async (req: Request, res: Response) => {
+    try {
+        const result = await UserModel.find(); 
+        res.send(result);
+    } catch (error: any) {
+        console.log(error.message);
+    }
+
+}
+
 export const userController = {
     createUser,
+    getAllUser,
 }

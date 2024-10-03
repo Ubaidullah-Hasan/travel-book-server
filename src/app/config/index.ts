@@ -9,4 +9,5 @@ export default {
   port: process.env.PORT,
   database_url: process.env.MONGODB_URL,
   client_url: process.env.CLIENT_URL,
+  bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
 };
