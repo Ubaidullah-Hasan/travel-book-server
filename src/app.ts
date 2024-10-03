@@ -3,9 +3,8 @@ import router from "./app/routes";
 import cors from "cors";
 import cookieParser from 'cookie-parser'
 import config from "./app/config";
-import routeNotFound from "./app/middlewares/routeNotFound";
-import AppError from "./app/errors/AppError";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
+import httpStatus from "http-status";
 
 
 const app = express();
@@ -31,7 +30,14 @@ app.get('/', (req: Request, res: Response) => {
 app.use(globalErrorHandler);
 
 // not found middleware
-app.use(routeNotFound); // todo
+
+app.use((req: Request, res: Response) => {
+    res.status(httpStatus.NOT_FOUND).json({
+        success: false,
+        message: "Api route not found!",
+        error: "",
+    })
+})
 
 
 

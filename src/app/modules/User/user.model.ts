@@ -1,12 +1,12 @@
 import mongoose, { model, Schema } from "mongoose";
-import { TUser } from "./user.interface";
+import { TUser, TUserModel } from "./user.interface";
 import { USER_ROLE, USER_STATUS } from "./user.constant";
 import bcrypt from 'bcrypt';
 import config from "../../config";
 
 // import profilePhoto from "../../../assets/user.png"
 
-const userSchema = new Schema<TUser>(
+const userSchema = new Schema<TUser, TUserModel>(
     {
         email: {
             type: String,
@@ -87,4 +87,13 @@ userSchema.statics.isPasswordMatched = async function (
     return await bcrypt.compare(plainTextPassword, hashedPassword);
 };
 
-export const UserModel = model<TUser>("User", userSchema); 
+// userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
+//     passwordChangedTimestamp: number,
+//     jwtIssuedTimestamp: number
+// ) {
+//     const passwordChangedTime =
+//         new Date(passwordChangedTimestamp).getTime() / 1000;
+//     return passwordChangedTime > jwtIssuedTimestamp;
+// }; todo
+
+export const UserModel = model<TUser, TUserModel>("User", userSchema); 

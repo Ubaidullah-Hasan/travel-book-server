@@ -9,7 +9,6 @@ import handleZodError from '../errors/handleZodError';
 import handleDuplicateError from '../errors/handlerDuplicateError';
 import { TErrorSources } from '../interfaces/error.interface';
 
-// todo 
 const globalErrorHandler: ErrorRequestHandler = async (err, req, res, next) => {
 
   let statusCode = 500;
@@ -61,7 +60,7 @@ const globalErrorHandler: ErrorRequestHandler = async (err, req, res, next) => {
   }
 
   //ultimate return
-  return res.status(statusCode).json({
+  res.status(statusCode).json({
     success: false,
     message,
     errorSources,
