@@ -1,23 +1,26 @@
 import { model, Schema } from "mongoose";
-import { TComment } from "./comment.interface";
+import { TPost } from "./post.interface";
 
-const CommentSchema = new Schema<TComment>({
+const PostSchema = new Schema<TPost>({
     userId: {
         type: Schema.Types.ObjectId,
         required: true,
         ref: 'User',
     },
-    postId: {
+    categoryId: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: 'Post',
+        ref: 'Category',
     },
-    comment: {
+    title: {
         type: String,
         required: true,
-        trim: true
     },
-    files: {
+    description: {
+        type: String,
+        required: true,
+    },
+    images: {
         type: [String],
         validate: {
             validator: function (files: string[]) {
@@ -25,10 +28,14 @@ const CommentSchema = new Schema<TComment>({
             },
             message: "Each file must be a valid URL"
         },
-    }
-},{
-    timestamps: true
+    },
+    isPremium: {
+        type: Boolean,
+        default: false,
+    },
+}, {
+    timestamps: true,
 });
 
-export const CommentModel = model<TComment>("Comment", CommentSchema);
+export const PostModel = model<TPost>("Post", PostSchema);
 
