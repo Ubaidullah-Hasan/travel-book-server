@@ -1,12 +1,19 @@
+import httpStatus from "http-status";
+import AppError from "../../errors/AppError";
+import { PostModel } from "../post/post.model";
 import { TComment } from "./comment.interface";
 import { CommentModel } from "./comment.model";
 
 
 const createCommentIntoDB = async (payload: TComment) => {
-    console.log(payload);
-    // todo => check post is available
-    // const result = await CommentModel.create(payload);
-    // return result;
+    const post = await PostModel.findById(payload.postId);
+    
+    if(!post){
+        throw new AppError(httpStatus.BAD_REQUEST,"No post found!");
+    }
+    
+    const result = await CommentModel.create(payload);
+    return result; 
 }
 
 const getAllComment = async () => {
