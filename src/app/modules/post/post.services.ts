@@ -10,12 +10,14 @@ const createPostIntoDB = async (payload: TPost) => {
 }
 
 const getAllPost = async (query: Record<string, unknown>) => {
-    const result = await new QueryBuilder(PostModel.find(), query)
+    const posts = new QueryBuilder(PostModel.find(), query)
         .fields()
         .paginate()
         .sort()
         .filter()
         .search(PostSearchableFields);
+    const result = await posts.modelQuery;
+
     return result;
 }
 

@@ -12,6 +12,10 @@ router.post("/",
 router.get("/", 
     commentController.getAllComment
 )
+router.get("/post/:postId", 
+    commentController.getAllCommentOfPost
+)
+
 router.get("/:id", 
     commentController.getSingleComment
 )

@@ -27,6 +27,18 @@ const getAllComment = catchAsync(async (req, res) => {
     });
 });
 
+const getAllCommentOfPost = catchAsync(async (req, res) => {
+    const {postId} = req.params;
+    const users = await commentServices.getAllCommentOfPostById(postId);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Comments Retrieved Successfully',
+        data: users,
+    });
+});
+
 const getSingleComment = catchAsync(async (req, res) => {
     const {id} = req.params;
     const users = await commentServices.getSingleCommentById(id);
@@ -45,4 +57,5 @@ export const commentController = {
     createComment,
     getAllComment,
     getSingleComment,
+    getAllCommentOfPost
 }
