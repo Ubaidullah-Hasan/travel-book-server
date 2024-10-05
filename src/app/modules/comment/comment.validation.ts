@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+// Regex for MongoDB ObjectId validation
+const objectIdRegex = /^[a-f\d]{24}$/i;
+
 const createCommentValidationSchema = z.object({
     body: z.object({
         userId: z.string().nonempty({ message: "User ID is required" }),
@@ -12,6 +15,9 @@ const createCommentValidationSchema = z.object({
             .array(z.string().url({ message: "Each file must be a valid URL" }))
             .nonempty({ message: "At least one file is required" })
             .optional(),
+        replies: z.array(
+            z.string().regex(objectIdRegex, { message: "Invalid reply ObjectId" })
+        ).optional(), 
     })
 });
 

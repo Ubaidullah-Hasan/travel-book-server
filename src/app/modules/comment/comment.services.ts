@@ -20,11 +20,12 @@ const getAllComment = async () => {
     const result = await CommentModel.find();
     return result;
 }
+
 const getAllCommentOfPostById = async (postId: string) => {
-    console.log(postId)
     const result = await CommentModel.find({ postId: postId });
     return result;
 }
+
 const getSingleCommentById = async (id: string) => {
     const result = await CommentModel.findById(id);
     return result;

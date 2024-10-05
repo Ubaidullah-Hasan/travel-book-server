@@ -6,4 +6,5 @@ export type TComment = {
     postId: ObjectId;
     comment: string;
     files: string[];
+    replies: string[];
 }

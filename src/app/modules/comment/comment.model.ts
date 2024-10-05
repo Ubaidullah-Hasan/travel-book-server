@@ -25,7 +25,13 @@ const CommentSchema = new Schema<TComment>({
             },
             message: "Each file must be a valid URL"
         },
-    }
+    },
+    replies: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Comment',
+        },
+    ],
 },{
     timestamps: true
 });
