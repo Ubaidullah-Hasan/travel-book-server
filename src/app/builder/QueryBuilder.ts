@@ -30,7 +30,7 @@ export class QueryBuilder<T> {
   paginate() {
     let limit: number = Number(this.query?.limit || 10);
 
-    let skip: number = 0;
+    let skip: number = 0; 
 
     if (this.query?.page) {
       const page: number = Number(this.query?.page || 1);
@@ -52,7 +52,7 @@ export class QueryBuilder<T> {
     return this;
   }
   fields() {
-    let fields = '';
+    let fields = ''; // which fields want to be displayed
 
     if (this.query?.fields) {
       fields = (this.query?.fields as string).split(',').join(' ');
@@ -61,6 +61,7 @@ export class QueryBuilder<T> {
     this.modelQuery = this.modelQuery.select(fields);
     return this;
   }
+
   filter() {
     const queryObj = { ...this.query };
     const excludeFields = ['searchTerm', 'page', 'limit', 'sortBy', 'fields'];
@@ -71,4 +72,5 @@ export class QueryBuilder<T> {
 
     return this;
   }
+
 }
