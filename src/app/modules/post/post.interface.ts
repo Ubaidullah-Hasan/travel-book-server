@@ -7,5 +7,7 @@ export type TPost = {
     description: string;
     images: string[];
     categoryId: ObjectId;
+    upVote: number;
+    downVote: number;
     isPremium: boolean;
 }
