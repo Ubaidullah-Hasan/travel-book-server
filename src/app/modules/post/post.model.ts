@@ -28,6 +28,7 @@ const PostSchema = new Schema<TPost>({
             },
             message: "Each file must be a valid URL"
         },
+        default: [],
     },
     upVote: {
         type: Number,

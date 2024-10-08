@@ -25,7 +25,9 @@ const getAllPost = async (query: Record<string, unknown>) => {
 }
 
 const getSinglePostById = async (id: string) => {
-    const result = await PostModel.findById(id);
+    const result = await PostModel.findById(id)
+        .populate('categoryId')
+        .populate("userId");
     return result;
 }
 

@@ -8,8 +8,10 @@ const createPostValidationSchema = z.object({
         description: z.string().min(1, { message: "Description is required" }),
         images: z
             .array(z.string().url({ message: "Each image must be a valid URL" }))
-            .nonempty({ message: "At least one image is required" })
-            .optional(),
+            .optional() 
+            .refine((val) => val === undefined || val.length === 0 || val.length > 0, {
+                message: "At least one image is required if provided",
+            }),
         upVote: z.number()
             .min(0, { message: "UpVote must be at least 0" })
             .default(0),
@@ -30,8 +32,10 @@ const updatePostValidationSchema = z.object({
         description: z.string().min(1, { message: "Description is required" }).optional(),
         images: z
             .array(z.string().url({ message: "Each image must be a valid URL" }))
-            .nonempty({ message: "At least one image is required" })
-            .optional(),
+            .optional() // Allow the field to be omitted
+            .refine((val) => val === undefined || val.length === 0 || val.length > 0, {
+                message: "At least one image is required if provided",
+            }),
         upVote: z.number()
             .min(0, { message: "UpVote must be at least 0" })
             .default(0)
