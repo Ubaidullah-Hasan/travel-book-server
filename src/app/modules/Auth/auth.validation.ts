@@ -30,10 +30,19 @@ const changePasswordValidationSchema = z.object({
   }),
 });
 
+const forgotPasswordValidationSchema = z.object({
+  body: z.object({
+    email: z.string({
+      required_error: 'Email is required',
+    }).email({message: "Ensure valid email!"}),
+  }),
+});
+
 
 
 export const AuthValidation = {
   registerValidationSchema,
   loginValidationSchema,
   changePasswordValidationSchema,
+  forgotPasswordValidationSchema,
 };

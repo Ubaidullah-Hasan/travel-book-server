@@ -7,6 +7,9 @@ import config from "../../config";
 import { USER_STATUS } from "../User/user.constant";
 import bcrypt from 'bcrypt';
 import { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken"
+import { transporter } from "../../utils/nodeMailerSetup";
+
 
 
 const registerUser = async (payload: TRegisterUser) => {
@@ -147,10 +150,42 @@ const changePassword = async (
     return null;
 };
 
+const forgotPassword = async(email: string) => {
+    
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, 'User with this email does not exist');
+    }
+
+    // Generate a JWT token for password reset
+    const resetToken = jwt.sign(
+        { id: user._id },
+        config.jwt_access_secret as string, // Your JWT secret key
+        { expiresIn: '1h' }     
+    );
+
+    const resetUrl = `${config.client_url}/reset-password/${resetToken}`;
+
+    // Send reset link to user's email
+    const mailOptions = {
+        to: user.email,
+        from: config.email_user,
+        subject: 'Password Reset Request',
+        html: `<p>You requested a password reset. Click <a href="${resetUrl}">here</a> to reset your password.</p>`
+    };
+
+    const result = await transporter.sendMail(mailOptions);
+
+    return result;
+}
+
+
+
 
 
 export const AuthServices = {
     registerUser,
     userLogin,
     changePassword,
+    forgotPassword,
 };
