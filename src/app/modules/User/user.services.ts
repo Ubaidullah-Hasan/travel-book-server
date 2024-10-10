@@ -1,4 +1,6 @@
+import httpStatus from "http-status";
 import { QueryBuilder } from "../../builder/QueryBuilder";
+import AppError from "../../errors/AppError";
 import { UserSearchableFields } from "./user.constant";
 import { TUser } from "./user.interface";
 import { UserModel } from "./user.model";
@@ -31,8 +33,25 @@ const getSingleUserFromDB = async (id: string) => {
     return user;
 };
 
+
+const updateUser = async (email: string, payload: TUser) => {
+    const user = await UserModel.isUserExistsByEmail(email);
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, "User does not exist");
+    }
+
+    const result = await UserModel.findOneAndUpdate(
+        { email: email },
+        payload,
+        { new: true }
+    );
+
+    return result;
+};
+
 export const UserServices = {
     createUser,
     getSingleUserFromDB,
-    getAllUsersFromDB
+    getAllUsersFromDB,
+    updateUser
 };

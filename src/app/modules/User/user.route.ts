@@ -20,4 +20,10 @@ router.get(
     userController.getSingleUser
 )
 
+router.patch(
+    '/update-user/:email',
+    validateRequest(userValidation.updateUserValidationSchema),
+    userController.updateUser
+)
+
 export const userRoutes = router;
