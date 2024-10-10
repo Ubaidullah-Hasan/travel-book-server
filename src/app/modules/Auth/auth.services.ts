@@ -164,7 +164,7 @@ const forgotPassword = async (email: string) => {
     const resetToken = jwt.sign(
         { id: user._id },
         config.jwt_access_secret as string, // Your JWT secret key
-        { expiresIn: '1h' }
+        { expiresIn: '10m' }
     );
 
     const resetUrl = `${config.client_url}/reset-password/${resetToken}`;
@@ -174,7 +174,36 @@ const forgotPassword = async (email: string) => {
         to: user.email,
         from: config.email_user,
         subject: 'Password Reset Request',
-        html: `<p>You requested a password reset. Click <a href="${resetUrl}">here</a> to reset your password.</p>`
+        html: `
+            <div style={{
+                display: 'flex',
+                flex-derection: "column",
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',  // পুরো ভিউপোর্টের উচ্চতা জুড়ে সেন্টার করার জন্য
+                backgroundColor: '#f0f0f0',  // হালকা ব্যাকগ্রাউন্ড রঙ
+                fontFamily: 'Arial, sans-serif',
+                textAlign: 'center',
+                padding: '20px',
+                borderRadius: '10px',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
+            }}>
+                <p style={{ fontSize: '18px', color: '#555' }}>দূর মিয়া পাসওয়ার্ড মনে থাকে না!🤓</p>
+                <h1 style={{ fontSize: '20px', color: '#333' }}>পাসওয়ার্ড চেঞ্জ করার রাজ্যে আপনাকে স্বাগতম😳</h1>
+                <p style={{ fontSize: '16px', color: '#777' }}>
+                    এই
+                    <a href=${resetUrl} style={{
+                        color: '#4CAF50',  // লিংকের জন্য সবুজ রঙ
+                        textDecoration: 'none',
+                        fontWeight: 'bold',
+                        marginLeft: '5px'
+                    }}>
+                        লিংকে
+                    </a>
+                    ক্লিক কইরা চেঞ্জ করে নেন।
+                </p>
+            </div>
+        `
     };
 
     const result = await transporter.sendMail(mailOptions);
