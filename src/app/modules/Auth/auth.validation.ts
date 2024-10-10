@@ -8,7 +8,7 @@ const registerValidationSchema = z.object({
     email: z.string({
       required_error: 'Email is required',
     }),
-    password: z.string({ required_error: 'Password is required' }).min(6,{message: "Password length minimum is 6 characters!"}),
+    password: z.string({ required_error: 'Password is required' }).min(6, { message: "Password length minimum is 6 characters!" }),
   }),
 });
 
@@ -34,7 +34,13 @@ const forgotPasswordValidationSchema = z.object({
   body: z.object({
     email: z.string({
       required_error: 'Email is required',
-    }).email({message: "Ensure valid email!"}),
+    }).email({ message: "Ensure valid email!" }),
+  }),
+});
+
+const resetPasswordValidationSchema = z.object({
+  body: z.object({
+    password: z.string({ required_error: 'Password is required' })
   }),
 });
 
@@ -45,4 +51,5 @@ export const AuthValidation = {
   loginValidationSchema,
   changePasswordValidationSchema,
   forgotPasswordValidationSchema,
+  resetPasswordValidationSchema,
 };

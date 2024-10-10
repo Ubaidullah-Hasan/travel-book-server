@@ -10,6 +10,9 @@ import { JwtPayload } from "jsonwebtoken";
 import jwt from "jsonwebtoken"
 import { transporter } from "../../utils/nodeMailerSetup";
 
+interface IJwtPayload extends JwtPayload {
+    id?: string;  // Optional 'id' property if it's present
+}
 
 
 const registerUser = async (payload: TRegisterUser) => {
@@ -125,10 +128,10 @@ const changePassword = async (
 
     //checking if the password is correct
 
-    if (!(await UserModel.isPasswordMatched(payload.oldPassword, user?.password))){
+    if (!(await UserModel.isPasswordMatched(payload.oldPassword, user?.password))) {
         throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched');
     }
-        
+
 
     //hash new password
     const newHashedPassword = await bcrypt.hash(
@@ -150,8 +153,8 @@ const changePassword = async (
     return null;
 };
 
-const forgotPassword = async(email: string) => {
-    
+const forgotPassword = async (email: string) => {
+
     const user = await UserModel.findOne({ email });
     if (!user) {
         throw new AppError(httpStatus.NOT_FOUND, 'User with this email does not exist');
@@ -161,7 +164,7 @@ const forgotPassword = async(email: string) => {
     const resetToken = jwt.sign(
         { id: user._id },
         config.jwt_access_secret as string, // Your JWT secret key
-        { expiresIn: '1h' }     
+        { expiresIn: '1h' }
     );
 
     const resetUrl = `${config.client_url}/reset-password/${resetToken}`;
@@ -179,6 +182,28 @@ const forgotPassword = async(email: string) => {
     return result;
 }
 
+const resetPassword = async (token: string, password: string) => {
+    const decoded = jwt.verify(token, config.jwt_access_secret as string) as IJwtPayload;
+
+    const user = await UserModel.findOne({
+        _id: decoded.id,
+    });
+
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, "Invalid or expired token'");
+    }
+
+    const hashedPassword = await bcrypt.hash(password, Number(config.bcrypt_salt_rounds));
+
+    const result = await UserModel.findByIdAndUpdate(
+        decoded.id,
+        { password: hashedPassword },
+        { new: true }
+    )
+
+    return result;
+}
+
 
 
 
@@ -188,4 +213,5 @@ export const AuthServices = {
     userLogin,
     changePassword,
     forgotPassword,
+    resetPassword,
 };
