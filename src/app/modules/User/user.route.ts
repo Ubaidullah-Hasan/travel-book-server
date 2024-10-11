@@ -29,10 +29,16 @@ router.patch(
 )
 
 router.patch(
-    '/following',
+    '/user-follow',
     auth(USER_ROLE.ADMIN, USER_ROLE.USER),
     validateRequest(userValidation.followingUserValidationSchema),
     userController.followingUser
+)
+
+router.get(
+    '/user-follow/:userId',
+    auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+    userController.getUserFollowingAndFollowers
 )
 
 export const userRoutes = router;

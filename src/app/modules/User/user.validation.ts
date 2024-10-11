@@ -49,7 +49,7 @@ const updateUserValidationSchema = z.object({
 
 const followingUserValidationSchema = z.object({
     body: z.object({
-        followingId: z.string().regex(/^[a-fA-F0-9]{24}$/, { message: "Invalid ObjectId" }),
+        // followingId: z.string().regex(/^[a-fA-F0-9]{24}$/, { message: "Invalid ObjectId" }),
         userId: z.string().regex(/^[a-fA-F0-9]{24}$/, { message: "Invalid ObjectId" }),
     })
 });

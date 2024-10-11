@@ -71,10 +71,31 @@ const following = async (followingId: string, userId: string) => {
     return result;
 }
 
+const getUserFollowingAndFollowers = async (userId: string) => {
+    const user = await UserModel.findById(userId).select('followers following');
+
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, "User not found!");
+    }
+    
+    const followersCount = user.followers.length;
+    const followingCount = user.following.length;
+
+    // Return the followers, following, and their count
+    return {
+        followers: user.followers,
+        following: user.following,
+        followersCount,
+        followingCount
+    };
+
+}
+
 export const UserServices = {
     createUser,
     getSingleUserFromDB,
     getAllUsersFromDB,
     updateUser,
     following,
+    getUserFollowingAndFollowers,
 };

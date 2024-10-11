@@ -56,14 +56,28 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
 });
 
 const followingUser = catchAsync(async (req: Request, res: Response) => {
-    const { followingId, userId} = req.body;
+    const {userId} = req.body;
+    const {_id} = req.user;
 
-    const result = await UserServices.following(followingId, userId);
+    const result = await UserServices.following(_id, userId);
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: "Now You Are Following!",
         data: result
+    })
+});
+
+const getUserFollowingAndFollowers = catchAsync(async (req: Request, res: Response) => {
+    const {userId} = req.params;
+
+    const followData = await UserServices.getUserFollowingAndFollowers(userId);
+    
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Retrive Following!",
+        data: followData
     })
 });
 
@@ -73,4 +87,5 @@ export const userController = {
     getAllUsers,
     updateUser,
     followingUser,
+    getUserFollowingAndFollowers,
 }
