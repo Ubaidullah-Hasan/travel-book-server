@@ -45,7 +45,7 @@ const updateUser = async (email: string, payload: TUser) => {
         payload,
         { new: true }
     );
-
+console.log(result);
     return result;
 };
 
