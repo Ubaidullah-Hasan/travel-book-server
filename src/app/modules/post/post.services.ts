@@ -31,8 +31,16 @@ const getSinglePostById = async (id: string) => {
     return result;
 }
 
+const getUserPostsById = async (id: string) => {
+    const result = await PostModel.find({userId: id})
+        .populate('categoryId')
+        .populate("userId");
+    return result;
+}
+
 export const postServices = {
     createPostIntoDB,
     getAllPost,
     getSinglePostById,
+    getUserPostsById,
 }

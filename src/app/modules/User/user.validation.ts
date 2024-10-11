@@ -29,7 +29,7 @@ const updateUserValidationSchema = z.object({
         email: z.string().email({ message: "Invalid email address" }).optional(),
         name: z.string().optional(),
         profilePhoto: z.string().url().optional(),
-        role: z.enum([USER_ROLE.ADMIN, USER_ROLE.USER], { message: "Invalid role" }).default(USER_ROLE.USER),
+        role: z.enum([USER_ROLE.ADMIN, USER_ROLE.USER], { message: "Invalid role" }).optional(),
         status: z.enum([USER_STATUS.ACTIVE, USER_STATUS.BLOCKED], { message: "Invalid status" }).optional(),
         isVerified: z.boolean().optional(),
         following: z.array(z.string().regex(/^[a-fA-F0-9]{24}$/, { message: "Invalid ObjectId" })).optional(),
@@ -43,7 +43,7 @@ const updateUserValidationSchema = z.object({
             }, {
                 message: "Invalid mobile number format"
             }).optional(),
-        isDeleted: z.boolean().optional().default(false),
+        isDeleted: z.boolean().optional(),
     })
 });
 
