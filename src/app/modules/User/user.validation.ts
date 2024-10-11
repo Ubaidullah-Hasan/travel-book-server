@@ -13,7 +13,12 @@ const createUserValidationSchema = z.object({
         isVerified: z.boolean().default(false),
         following: z.array(z.string().regex(/^[a-fA-F0-9]{24}$/, { message: "Invalid ObjectId" })).optional(),
         followers: z.array(z.string().regex(/^[a-fA-F0-9]{24}$/, { message: "Invalid ObjectId" })).optional(),
-        mobileNumber: z.string().regex(/^\+?[1-9]\d{1,14}$/, { message: "Invalid mobile number format" }).optional(),
+        mobileNumber: z.string()
+            .refine((value) => {
+                return /^0[1-9]\d{1,14}$/.test(value);
+            }, {
+                message: "Invalid mobile number format"
+            }).optional(),
         isDeleted: z.boolean().optional().default(false),
     })
 });
