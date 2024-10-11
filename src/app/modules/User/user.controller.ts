@@ -55,9 +55,22 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
     })
 });
 
+const followingUser = catchAsync(async (req: Request, res: Response) => {
+    const { followingId, userId} = req.body;
+
+    const result = await UserServices.following(followingId, userId);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Now You Are Following!",
+        data: result
+    })
+});
+
 export const userController = {
     createUser,
     getSingleUser,
     getAllUsers,
     updateUser,
+    followingUser,
 }

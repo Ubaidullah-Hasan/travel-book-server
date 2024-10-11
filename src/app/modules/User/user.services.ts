@@ -45,13 +45,36 @@ const updateUser = async (email: string, payload: TUser) => {
         payload,
         { new: true }
     );
-console.log(result);
     return result;
 };
+
+// “Following” is the term for the users who you follow. "Followers" are the users who follow you
+// followingId => ami jake 
+// followerId => je amake (userId)
+const following = async (followingId: string, userId: string) => {
+
+    // increase following of UserModel
+    const result = await UserModel.findByIdAndUpdate(
+        userId,
+        { $addToSet: { following: followingId } },
+        { new: true }
+    );
+
+    // increase folower of UserModel
+    if (result) {
+        await UserModel.findByIdAndUpdate(followingId,
+            { $addToSet: { followers: userId } },
+            { new: true }
+        )
+    }
+
+    return result;
+}
 
 export const UserServices = {
     createUser,
     getSingleUserFromDB,
     getAllUsersFromDB,
-    updateUser
+    updateUser,
+    following,
 };
