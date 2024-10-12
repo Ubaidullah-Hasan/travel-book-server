@@ -4,6 +4,7 @@ import AppError from "../../errors/AppError";
 import { UserSearchableFields } from "./user.constant";
 import { TUser } from "./user.interface";
 import { UserModel } from "./user.model";
+import mongoose from "mongoose";
 
 
 const createUser = async (payload: TUser) => {
@@ -48,28 +49,52 @@ const updateUser = async (email: string, payload: TUser) => {
     return result;
 };
 
-// “Following” is the term for the users who you follow. "Followers" are the users who follow you
-// followingId => ami jake 
-// followerId => je amake (userId)
-const following = async (followingId: string, userId: string) => {
+const toggleFollowing = async (followingId: string, userId: string) => {
+    // Find the current user to check if they are already following
+    const user = await UserModel.findById(userId);
 
-    // increase following of UserModel
-    const result = await UserModel.findByIdAndUpdate(
-        userId,
-        { $addToSet: { following: followingId } },
-        { new: true }
-    );
+    if (!user) {
+        throw new Error('User not found!');
+    }
 
-    // increase folower of UserModel
-    if (result) {
-        await UserModel.findByIdAndUpdate(followingId,
-            { $addToSet: { followers: userId } },
+    // Check if the user is already following the target user
+    const followingObjectId = new mongoose.Types.ObjectId(followingId);
+    const isFollowing = user.following.includes(followingObjectId);
+
+    let result;
+
+    if (isFollowing) {
+        // If the user is already following, remove them (Unfollow)
+        result = await UserModel.findByIdAndUpdate(
+            userId,
+            { $pull: { following: followingId } }, // Remove followingId from the following list
             { new: true }
-        )
+        );
+
+        // Remove the current user from the target user's followers list
+        await UserModel.findByIdAndUpdate(
+            followingId,
+            { $pull: { followers: userId } }, // Remove userId from the followers list
+            { new: true }
+        );
+    } else {
+        // If the user is not following, add them (Follow)
+        result = await UserModel.findByIdAndUpdate(
+            userId,
+            { $addToSet: { following: followingId } }, // Add followingId to the following list
+            { new: true }
+        );
+
+        // Add the current user to the target user's followers list
+        await UserModel.findByIdAndUpdate(
+            followingId,
+            { $addToSet: { followers: userId } }, // Add userId to the followers list
+            { new: true }
+        );
     }
 
     return result;
-}
+};
 
 const getUserFollowingAndFollowers = async (userId: string) => {
     const user = await UserModel.findById(userId).select('followers following');
@@ -77,7 +102,7 @@ const getUserFollowingAndFollowers = async (userId: string) => {
     if (!user) {
         throw new AppError(httpStatus.NOT_FOUND, "User not found!");
     }
-    
+
     const followersCount = user.followers.length;
     const followingCount = user.following.length;
 
@@ -96,6 +121,6 @@ export const UserServices = {
     getSingleUserFromDB,
     getAllUsersFromDB,
     updateUser,
-    following,
+    toggleFollowing,
     getUserFollowingAndFollowers,
 };

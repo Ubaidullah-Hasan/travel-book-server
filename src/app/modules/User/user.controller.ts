@@ -56,10 +56,9 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
 });
 
 const followingUser = catchAsync(async (req: Request, res: Response) => {
-    const {userId} = req.body;
-    const {_id} = req.user;
+    const {userId, followingId} = req.body;
 
-    const result = await UserServices.following(_id, userId);
+    const result = await UserServices.toggleFollowing(followingId, userId);
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
