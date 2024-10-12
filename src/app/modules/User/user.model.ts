@@ -21,7 +21,7 @@ const userSchema = new Schema<TUser, TUserModel>(
         },
         profilePhoto: {
             type: String,
-            default: "https://i.ibb.co.com/nb7ZFPP/user.png"
+            default: "https://i.ibb.co.com/V3HmxcR/man-avatar.png",
         },
         role: {
             type: String,

@@ -7,7 +7,7 @@ const createUserValidationSchema = z.object({
         email: z.string({ message: "Invalid email address" }).email({ message: "Invalid email address" }),
         name: z.string({ message: "Name is required" }).nonempty({ message: "Name is required" }),
         password: z.string({ message: "Password is required!" }).min(6, { message: "Password must be at least 6 characters" }),
-        profilePhoto: z.string().url().optional(),
+        profilePhoto: z.string().url().optional().default("https://i.ibb.co.com/V3HmxcR/man-avatar.png"),
         role: z.enum([USER_ROLE.ADMIN, USER_ROLE.USER], { message: "Invalid role" }).default(USER_ROLE.USER),
         status: z.enum([USER_STATUS.ACTIVE, USER_STATUS.BLOCKED], { message: "Invalid status" }).default(USER_STATUS.ACTIVE),
         isVerified: z.boolean().default(false),

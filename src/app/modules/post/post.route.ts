@@ -23,4 +23,16 @@ router.get("/user-post/:id",
     postController.getUserPosts
 )
 
+router.patch("/toggle-upvote/:postId", 
+    auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+    validateRequest(postValidation.updateVoteSchema),
+    postController.toggleUpVote
+)
+
+router.patch("/toggle-downvote/:postId", 
+    auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+    validateRequest(postValidation.updateVoteSchema),
+    postController.toggleDownVote
+)
+
 export const postRoutes = router;

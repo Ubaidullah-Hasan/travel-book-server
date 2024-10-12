@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+const objectIdSchema = z.string().refine((val) => /^[0-9a-fA-F]{24}$/.test(val), {
+    message: "Invalid ObjectId format",
+});
+
 const createPostValidationSchema = z.object({
     body: z.object({
         userId: z.string().nonempty({ message: "User ID is required" }),
@@ -12,12 +16,8 @@ const createPostValidationSchema = z.object({
             .refine((val) => val === undefined || val.length === 0 || val.length > 0, {
                 message: "At least one image is required if provided",
             }),
-        upVote: z.number()
-            .min(0, { message: "UpVote must be at least 0" })
-            .default(0),
-        downVote: z.number()
-            .min(0, { message: "UpVote must be at least 0" })
-            .default(0),
+        upVote: z.array(objectIdSchema).default([]), 
+        downVote: z.array(objectIdSchema).default([]),
         isPremium: z.boolean().optional().default(false),
     })
 });
@@ -36,20 +36,19 @@ const updatePostValidationSchema = z.object({
             .refine((val) => val === undefined || val.length === 0 || val.length > 0, {
                 message: "At least one image is required if provided",
             }),
-        upVote: z.number()
-            .min(0, { message: "UpVote must be at least 0" })
-            .default(0)
-            .optional(),
-        downVote: z.number()
-            .min(0, { message: "DownVote must be at least 0" })
-            .default(0)
-            .optional(),
         isPremium: z.boolean().optional().default(false),
     })
 });
+
+const updateVoteSchema = z.object({
+    body: z.object({
+        userId: z.string().length(24, { message: "Invalid Object ID format" })
+    })
+})
 
 
 export const postValidation = {
     createPostValidationSchema,
     updatePostValidationSchema,
+    updateVoteSchema,
 }

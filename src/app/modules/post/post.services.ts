@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { QueryBuilder } from "../../builder/QueryBuilder";
 import { PostSearchableFields } from "./post.constant";
 import { TPost } from "./post.interface";
@@ -32,10 +33,73 @@ const getSinglePostById = async (id: string) => {
 }
 
 const getUserPostsById = async (id: string) => {
-    const result = await PostModel.find({userId: id})
+    const result = await PostModel.find({ userId: id })
         .populate('categoryId')
         .populate("userId");
     return result;
+}
+
+const toggleUpVote = async (postId: string, userId: string) => {
+    const post = await PostModel.findById(postId); 
+
+    if (!post) {
+        throw new Error('Post not found!'); 
+    };
+
+    const userObjectId = new mongoose.Types.ObjectId(userId); 
+    const hasUpvoted = post.upVote.includes(userObjectId);
+
+    let updatedPost;
+
+    if (hasUpvoted) {
+        // If the user has upvoted, remove their vote (Unvote)
+        updatedPost = await PostModel.findByIdAndUpdate(
+            postId,
+            { $pull: { upVote: userObjectId } },
+            { new: true }
+        );
+    } else {
+        // If the user has not upvoted, add their vote (Upvote)
+        updatedPost = await PostModel.findByIdAndUpdate(
+            postId,
+            { $addToSet: { upVote: userObjectId } }, 
+            { new: true }
+        );
+    }
+
+    return updatedPost;
+}
+
+
+const toggleDownVote = async (postId: string, userId: string) => {
+    const post = await PostModel.findById(postId); 
+
+    if (!post) {
+        throw new Error('Post not found!'); 
+    }
+
+    const userObjectId = new mongoose.Types.ObjectId(userId); 
+    const hasDownvoted = post.downVote.includes(userObjectId);
+
+    let updatedPost;
+
+    if (hasDownvoted) {
+        // If the user has upvoted, remove their vote (Unvote)
+        updatedPost = await PostModel.findByIdAndUpdate(
+            postId,
+            { $pull: { downVote: userObjectId } },
+            { new: true }
+        );
+    } else {
+        // If the user has not upvoted, add their vote (Upvote)
+        updatedPost = await PostModel.findByIdAndUpdate(
+            postId,
+            { $addToSet: { downVote: userObjectId } },
+            { new: true }
+        );
+    }
+
+    return updatedPost;
 }
 
 export const postServices = {
@@ -43,4 +107,6 @@ export const postServices = {
     getAllPost,
     getSinglePostById,
     getUserPostsById,
+    toggleUpVote,
+    toggleDownVote,
 }

@@ -1,4 +1,4 @@
-import { ObjectId } from "mongoose"
+import mongoose, { ObjectId } from "mongoose"
 
 export type TPost = {
     _id: ObjectId;
@@ -7,7 +7,7 @@ export type TPost = {
     description: string;
     images: string[];
     categoryId: ObjectId;
-    upVote: number;
-    downVote: number;
+    upVote: mongoose.Types.ObjectId[];
+    downVote: mongoose.Types.ObjectId[];
     isPremium: boolean;
 }

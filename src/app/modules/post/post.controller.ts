@@ -52,7 +52,31 @@ const getUserPosts = catchAsync(async (req, res) => {
 });
 
 
+const toggleUpVote = catchAsync(async (req, res) => {
+    const { postId } = req.params;
+    const {userId} = req.body;
+    const users = await postServices.toggleUpVote(postId, userId);
 
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Upvote Successfully Added!',
+        data: users,
+    });
+});
+
+const toggleDownVote = catchAsync(async (req, res) => {
+    const { postId } = req.params;
+    const {userId} = req.body;
+    const users = await postServices.toggleDownVote(postId, userId);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Down vote successfully added!',
+        data: users,
+    });
+});
 
 
 export const postController = {
@@ -60,4 +84,6 @@ export const postController = {
     getAllPost,
     getSinglePost,
     getUserPosts,
+    toggleUpVote,
+    toggleDownVote,
 }

@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
 import { TPost } from "./post.interface";
 
 const PostSchema = new Schema<TPost>({
@@ -30,16 +30,16 @@ const PostSchema = new Schema<TPost>({
         },
         default: [],
     },
-    upVote: {
-        type: Number,
-        default: 0,
-        required: true
-    },
-    downVote: {
-        type: Number,
-        default: 0,
-        required: true
-    },
+    upVote: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+        default: []
+    }],
+    downVote: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+        default: []
+    }],
     isPremium: {
         type: Boolean,
         default: false,
