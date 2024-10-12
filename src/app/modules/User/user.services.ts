@@ -97,7 +97,12 @@ const toggleFollowing = async (followingId: string, userId: string) => {
 };
 
 const getUserFollowingAndFollowers = async (userId: string) => {
-    const user = await UserModel.findById(userId).select('followers following');
+    const user = await UserModel.findById(userId)
+        .select('followers following')
+        .populate([
+            { path: 'following', select: 'name profilePhoto email' },  // Populate following with specific fields
+            { path: 'followers', select: 'name profilePhoto email' },  // Populate followers with specific fields
+        ]);
 
     if (!user) {
         throw new AppError(httpStatus.NOT_FOUND, "User not found!");
