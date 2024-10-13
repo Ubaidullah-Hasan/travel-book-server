@@ -129,6 +129,10 @@ const premiumUser = async (userId: string, payload: any) => {
         throw new AppError(httpStatus.NOT_FOUND, "User not found");
     }
 
+    if(user?.isVerified){
+        throw new AppError(httpStatus.NOT_FOUND, "User already verified!");
+    }
+
     const userPosts = await PostModel.find({ userId: userId });
 
     const hasUpvote = userPosts.some(post => {
