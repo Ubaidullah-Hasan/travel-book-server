@@ -78,6 +78,20 @@ const toggleDownVote = catchAsync(async (req, res) => {
     });
 });
 
+const deletePostPermanently = catchAsync(async (req, res) => {
+    const { postId } = req.params;
+    const result = await postServices.deletePostPermanently(postId);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Post delete successfull!',
+        data: result,
+    });
+});
+
+
+
 
 export const postController = {
     createPost,
@@ -86,4 +100,5 @@ export const postController = {
     getUserPosts,
     toggleUpVote,
     toggleDownVote,
+    deletePostPermanently,
 }

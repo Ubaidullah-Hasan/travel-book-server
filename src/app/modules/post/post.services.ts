@@ -3,6 +3,8 @@ import { QueryBuilder } from "../../builder/QueryBuilder";
 import { PostSearchableFields } from "./post.constant";
 import { TPost } from "./post.interface";
 import { PostModel } from "./post.model";
+import AppError from "../../errors/AppError";
+import httpStatus from "http-status";
 
 
 const createPostIntoDB = async (payload: TPost) => {
@@ -40,13 +42,13 @@ const getUserPostsById = async (id: string) => {
 }
 
 const toggleUpVote = async (postId: string, userId: string) => {
-    const post = await PostModel.findById(postId); 
+    const post = await PostModel.findById(postId);
 
     if (!post) {
-        throw new Error('Post not found!'); 
+        throw new Error('Post not found!');
     };
 
-    const userObjectId = new mongoose.Types.ObjectId(userId); 
+    const userObjectId = new mongoose.Types.ObjectId(userId);
     const hasUpvoted = post.upVote.includes(userObjectId);
 
     let updatedPost;
@@ -62,7 +64,7 @@ const toggleUpVote = async (postId: string, userId: string) => {
         // If the user has not upvoted, add their vote (Upvote)
         updatedPost = await PostModel.findByIdAndUpdate(
             postId,
-            { $addToSet: { upVote: userObjectId } }, 
+            { $addToSet: { upVote: userObjectId } },
             { new: true }
         );
     }
@@ -72,13 +74,13 @@ const toggleUpVote = async (postId: string, userId: string) => {
 
 
 const toggleDownVote = async (postId: string, userId: string) => {
-    const post = await PostModel.findById(postId); 
+    const post = await PostModel.findById(postId);
 
     if (!post) {
-        throw new Error('Post not found!'); 
+        throw new Error('Post not found!');
     }
 
-    const userObjectId = new mongoose.Types.ObjectId(userId); 
+    const userObjectId = new mongoose.Types.ObjectId(userId);
     const hasDownvoted = post.downVote.includes(userObjectId);
 
     let updatedPost;
@@ -102,6 +104,14 @@ const toggleDownVote = async (postId: string, userId: string) => {
     return updatedPost;
 }
 
+const deletePostPermanently = async (postId: string) => {
+    const post = await PostModel.findByIdAndDelete(postId);
+    if (!post) {
+        throw new AppError(httpStatus.NOT_FOUND, "No post found!");
+    }
+    return post;
+}
+
 export const postServices = {
     createPostIntoDB,
     getAllPost,
@@ -109,4 +119,5 @@ export const postServices = {
     getUserPostsById,
     toggleUpVote,
     toggleDownVote,
+    deletePostPermanently,
 }

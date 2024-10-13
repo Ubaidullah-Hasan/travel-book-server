@@ -32,7 +32,7 @@ const registerUser = async (payload: TRegisterUser) => {
         profilePhoto: newUser.profilePhoto,
         role: newUser.role,
         status: newUser.status,
-        isVarified: newUser.isVerified,
+        isVerified: newUser.isVerified,
         isDeleted: newUser.isDeleted,
     };
 
@@ -84,7 +84,7 @@ const userLogin = async (payload: TLoginUser) => {
         profilePhoto: user.profilePhoto,
         role: user.role,
         status: user.status,
-        isVarified: user.isVerified,
+        isVerified: user.isVerified,
         isDeleted: user.isDeleted,
     };
 

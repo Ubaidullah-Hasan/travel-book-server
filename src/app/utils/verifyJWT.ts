@@ -14,7 +14,7 @@ export const createToken = (
     mobileNumber?: string;
     role: keyof typeof USER_ROLE;
     status: keyof typeof USER_STATUS;
-    isVarified: boolean,
+    isVerified: boolean,
     isDeleted: boolean,
   },
   secret: string,

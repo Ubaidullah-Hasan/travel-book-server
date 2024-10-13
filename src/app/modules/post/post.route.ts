@@ -35,4 +35,9 @@ router.patch("/toggle-downvote/:postId",
     postController.toggleDownVote
 )
 
+
+router.delete("/:postId",
+    postController.deletePostPermanently
+)
+
 export const postRoutes = router;

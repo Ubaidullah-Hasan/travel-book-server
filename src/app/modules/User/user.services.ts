@@ -155,8 +155,9 @@ const premiumUser = async (userId: string, payload: any) => {
             tran_id: transactionId,
             cus_name: user.name,
             cus_email: user.email,
-            cus_phone: user?.mobileNumber,
+            cus_phone: user?.mobileNumber || "01401635894",
         }
+        
         result = await createPayment(paymentInfo);
     }
 

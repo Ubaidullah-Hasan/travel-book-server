@@ -41,8 +41,7 @@ const PostSchema = new Schema<TPost>({
         default: []
     }],
     isPremium: {
-        type: Boolean,
-        default: false,
+        type: Boolean
     },
 }, {
     timestamps: true,

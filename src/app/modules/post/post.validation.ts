@@ -18,7 +18,7 @@ const createPostValidationSchema = z.object({
             }),
         upVote: z.array(objectIdSchema).default([]), 
         downVote: z.array(objectIdSchema).default([]),
-        isPremium: z.boolean().optional().default(false),
+        isPremium: z.boolean({message: "Is premium is required!"}),
     })
 });
 
