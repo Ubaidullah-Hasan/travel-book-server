@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
 import { QueryBuilder } from "../../builder/QueryBuilder";
 import AppError from "../../errors/AppError";
@@ -5,6 +6,8 @@ import { UserSearchableFields } from "./user.constant";
 import { TUser } from "./user.interface";
 import { UserModel } from "./user.model";
 import mongoose from "mongoose";
+import { PostModel } from "../post/post.model";
+import { createPayment } from "../payment/payment_utils";
 
 
 const createUser = async (payload: TUser) => {
@@ -100,8 +103,8 @@ const getUserFollowingAndFollowers = async (userId: string) => {
     const user = await UserModel.findById(userId)
         .select('followers following')
         .populate([
-            { path: 'following', select: 'name profilePhoto email' },  // Populate following with specific fields
-            { path: 'followers', select: 'name profilePhoto email' },  // Populate followers with specific fields
+            { path: 'following', select: 'name profilePhoto email' },
+            { path: 'followers', select: 'name profilePhoto email' },
         ]);
 
     if (!user) {
@@ -118,7 +121,42 @@ const getUserFollowingAndFollowers = async (userId: string) => {
         followersCount,
         followingCount
     };
+}
 
+const premiumUser = async (userId: string, payload: any) => {
+    const user = await UserModel.findById(userId);
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, "User not found");
+    }
+
+    const userPosts = await PostModel.find({ userId: userId });
+
+    const hasUpvote = userPosts.some(post => {
+        return post.upVote.length > 0;
+        // return post.upVote.includes(new mongoose.Types.ObjectId(userId));
+    });
+
+    if (!hasUpvote) {
+        throw new AppError(httpStatus.EXPECTATION_FAILED, "You have no enough up votes!");
+    }
+
+    const transactionId = 'TNX-' + Date.now();
+
+    // todo:
+
+    let result;
+    if (hasUpvote) {
+        const paymentInfo = {
+            amount: payload.totalPrice,
+            tran_id: transactionId,
+            cus_name: user.name,
+            cus_email: user.email,
+            cus_phone: user?.mobileNumber,
+        }
+        result = await createPayment(paymentInfo);
+    }
+
+    return result;
 }
 
 export const UserServices = {
@@ -128,4 +166,5 @@ export const UserServices = {
     updateUser,
     toggleFollowing,
     getUserFollowingAndFollowers,
+    premiumUser,
 };

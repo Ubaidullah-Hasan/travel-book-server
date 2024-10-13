@@ -35,6 +35,13 @@ router.patch(
     userController.followingUser
 )
 
+router.patch(
+    '/user-payment/:userId',
+    auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+    // validateRequest(userValidation.followingUserValidationSchema),
+    userController.premiumUser
+)
+
 router.get(
     '/user-follow/:userId',
     auth(USER_ROLE.ADMIN, USER_ROLE.USER),

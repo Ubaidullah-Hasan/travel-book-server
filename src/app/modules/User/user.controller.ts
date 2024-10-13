@@ -80,6 +80,18 @@ const getUserFollowingAndFollowers = catchAsync(async (req: Request, res: Respon
     })
 });
 
+const premiumUser = catchAsync(async (req, res) => {
+    const { userId } = req.params;
+    const result = await UserServices.premiumUser(userId, req.body);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Payment!',
+        data: result,
+    });
+});
+
 export const userController = {
     createUser,
     getSingleUser,
@@ -87,4 +99,5 @@ export const userController = {
     updateUser,
     followingUser,
     getUserFollowingAndFollowers,
+    premiumUser,
 }

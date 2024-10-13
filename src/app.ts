@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 import config from "./app/config";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 import httpStatus from "http-status";
+import path from "path";
 
 
 const app = express();
@@ -16,6 +17,9 @@ app.use(
     })
 );
 app.use(cookieParser());
+
+app.use('/assets', express.static(path.join(__dirname, './assets'))); // assets folder declaration
+
 
 //parser
 app.use(express.json());
