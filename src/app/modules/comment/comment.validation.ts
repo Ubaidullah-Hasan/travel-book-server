@@ -21,7 +21,23 @@ const createCommentValidationSchema = z.object({
     })
 });
 
+const updateCommentValidationSchema = z.object({
+    body: z.object({
+        comment: z
+            .string()
+            .min(1, { message: "Comment is required" })
+            .trim(),
+        files: z
+            .array(z.string().url({ message: "Each file must be a valid URL" }))
+            .optional(),
+        replies: z.array(
+            z.string().regex(objectIdRegex, { message: "Invalid reply ObjectId" })
+        ).optional(), 
+    })
+});
+
 
 export const commentValidation = {
     createCommentValidationSchema,
+    updateCommentValidationSchema,
 }

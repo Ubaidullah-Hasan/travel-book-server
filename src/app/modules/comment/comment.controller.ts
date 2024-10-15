@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 import { commentServices } from "./comment.services";
 
 const createComment = catchAsync(async (req: Request, res: Response) => {
-    const payload = req.body; 
+    const payload = req.body;
 
     const result = await commentServices.createCommentIntoDB(payload);
     sendResponse(res, {
@@ -28,7 +28,7 @@ const getAllComment = catchAsync(async (req, res) => {
 });
 
 const getAllCommentOfPost = catchAsync(async (req, res) => {
-    const {postId} = req.params; 
+    const { postId } = req.params;
     const users = await commentServices.getAllCommentOfPostById(postId, req.query);
 
     sendResponse(res, {
@@ -40,7 +40,7 @@ const getAllCommentOfPost = catchAsync(async (req, res) => {
 });
 
 const getSingleComment = catchAsync(async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     const users = await commentServices.getSingleCommentById(id);
 
     sendResponse(res, {
@@ -52,16 +52,32 @@ const getSingleComment = catchAsync(async (req, res) => {
 });
 
 const deleteCommentById = catchAsync(async (req, res) => {
-    const {commentId} = req.params;
-    const {userId} = req.body;
+    const { commentId } = req.params;
+    const { userId } = req.query;
 
-    await commentServices.deleteCommentById(commentId, userId);
+    await commentServices.deleteCommentById(commentId, userId as string);
 
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
         message: 'Comment Deleted Successfully',
         data: null,
+    });
+});
+
+
+const editCommentByCommentOwner = catchAsync(async (req, res) => {
+    const { commentId } = req.params;
+    const { userId } = req.query;
+    const payload = req.body;
+
+    const result = await commentServices.editCommentByCommentOwner(commentId, userId as string, payload);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Comment Edite Successfully!',
+        data: result,
     });
 });
 
@@ -73,4 +89,5 @@ export const commentController = {
     getSingleComment,
     getAllCommentOfPost,
     deleteCommentById,
+    editCommentByCommentOwner,
 }

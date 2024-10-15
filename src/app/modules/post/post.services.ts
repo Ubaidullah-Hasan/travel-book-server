@@ -19,7 +19,7 @@ const getAllPost = async (query: Record<string, unknown>) => {
         .sort()
         .filter()
         .search(PostSearchableFields)
-    // .filterByCategories();
+        // .filterByCategories();
 
     const result = await posts.modelQuery
         .populate('categoryId')

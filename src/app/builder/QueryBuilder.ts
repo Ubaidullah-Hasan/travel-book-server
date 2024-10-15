@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { FilterQuery, Query } from 'mongoose';
+import  { FilterQuery, Query } from 'mongoose';
 
 export class QueryBuilder<T> {
   public query: Record<string, unknown>; //payload
@@ -44,7 +44,7 @@ export class QueryBuilder<T> {
 
 
   sort() {
-    
+
     let sortBy = '-createdAt';
 
     if (this.query?.sortBy) {
@@ -66,26 +66,6 @@ export class QueryBuilder<T> {
     this.modelQuery = this.modelQuery.select(fields);
     return this;
   }
-
-  // filterByCategories() {
-
-  //   const selectedCategories = this?.query?.selectedCategories as string[]; // Ensure it's treated as an array
-  //   if (Array.isArray(selectedCategories)) {
-  //     const filterEmpty = selectedCategories.filter(item => item !== ""); // Filter out empty strings
-
-  //     if (filterEmpty.length > 0) {
-  //       const selectedCategoryIds: mongoose.Types.ObjectId[] = filterEmpty.map(cat => new mongoose.Types.ObjectId(cat.trim()));
-
-  //       if (selectedCategoryIds.length > 0) {
-  //         this.modelQuery = this.modelQuery.find(
-  //           { userId: { $in: selectedCategoryIds } }
-  //         );
-  //       }
-  //     }
-  //   }
-
-  //   return this;
-  // }
 
   filter() {
     const queryObj = { ...this.query };
