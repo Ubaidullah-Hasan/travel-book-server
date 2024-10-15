@@ -3,6 +3,8 @@ import AppError from "../../errors/AppError";
 import { PostModel } from "../post/post.model";
 import { TComment } from "./comment.interface";
 import { CommentModel } from "./comment.model";
+import { QueryBuilder } from "../../builder/QueryBuilder";
+import  mongoose from "mongoose";
 
 
 const createCommentIntoDB = async (payload: TComment) => {
@@ -21,8 +23,17 @@ const getAllComment = async () => {
     return result;
 }
 
-const getAllCommentOfPostById = async (postId: string) => {
-    const result = await CommentModel.find({ postId: postId });
+const getAllCommentOfPostById = async (postId: string, query: Record<string, unknown>) => {
+    const comments = new QueryBuilder(CommentModel.find({ postId: postId }), query)
+        .fields()
+        .paginate()
+        .sort()
+
+
+    const result = await comments.modelQuery
+        .populate("userId")
+        .populate("postId");
+
     return result;
 }
 
@@ -31,9 +42,24 @@ const getSingleCommentById = async (id: string) => {
     return result;
 }
 
+const deleteCommentById = async (commentId: string, userId: string) => {
+
+    const comment = await CommentModel.findById(commentId);
+    const userIdStrToObjId = new mongoose.Types.ObjectId(userId); // userId will schema types and => interface will mongoose.Types.ObjectId
+
+
+    if (!comment?.userId.equals(userIdStrToObjId)) { // for compatibility check
+        throw new AppError(httpStatus.BAD_REQUEST, "You are not allowed to delete!")
+    }
+
+    const result = await CommentModel.findByIdAndDelete(commentId);
+    return result;
+}
+
 export const commentServices = {
     createCommentIntoDB,
     getAllComment,
     getSingleCommentById,
     getAllCommentOfPostById,
+    deleteCommentById,
 }

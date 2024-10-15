@@ -29,7 +29,7 @@ const getAllComment = catchAsync(async (req, res) => {
 
 const getAllCommentOfPost = catchAsync(async (req, res) => {
     const {postId} = req.params; 
-    const users = await commentServices.getAllCommentOfPostById(postId);
+    const users = await commentServices.getAllCommentOfPostById(postId, req.query);
 
     sendResponse(res, {
         success: true,
@@ -51,11 +51,26 @@ const getSingleComment = catchAsync(async (req, res) => {
     });
 });
 
+const deleteCommentById = catchAsync(async (req, res) => {
+    const {commentId} = req.params;
+    const {userId} = req.body;
+
+    await commentServices.deleteCommentById(commentId, userId);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Comment Deleted Successfully',
+        data: null,
+    });
+});
+
 
 
 export const commentController = {
     createComment,
     getAllComment,
     getSingleComment,
-    getAllCommentOfPost
+    getAllCommentOfPost,
+    deleteCommentById,
 }

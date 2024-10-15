@@ -67,6 +67,12 @@ const toggleUpVote = async (postId: string, userId: string) => {
     };
 
     const userObjectId = new mongoose.Types.ObjectId(userId);
+    const existDownVote = post.downVote.includes(userObjectId);
+
+    if (existDownVote) {
+        throw new AppError(httpStatus.BAD_REQUEST, "You give already down vote!")
+    }
+
     const hasUpvoted = post.upVote.includes(userObjectId);
 
     let updatedPost;
@@ -105,6 +111,12 @@ const toggleDownVote = async (postId: string, userId: string) => {
     }
 
     const userObjectId = new mongoose.Types.ObjectId(userId);
+    const existUpVote = post.upVote.includes(userObjectId);
+
+    if (existUpVote) {
+        throw new AppError(httpStatus.BAD_REQUEST, "You give already up vote!")
+    }
+
     const hasDownvoted = post.downVote.includes(userObjectId);
 
     let updatedPost;
