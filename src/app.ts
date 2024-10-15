@@ -27,7 +27,7 @@ app.use(express.json());
 app.use("/api/v1", router);
 
 app.get('/', (req: Request, res: Response) => {
-    res.send('Server in running')
+    res.send('Server in running');
 })
 
 //global error handler

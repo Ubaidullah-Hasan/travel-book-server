@@ -10,4 +10,5 @@ export type TPost = {
     upVote: mongoose.Types.ObjectId[];
     downVote: mongoose.Types.ObjectId[];
     isPremium: boolean;
+    upVoteSize: number;
 }

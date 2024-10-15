@@ -18,7 +18,8 @@ const getAllPost = async (query: Record<string, unknown>) => {
         .paginate()
         .sort()
         .filter()
-        .search(PostSearchableFields);
+        .search(PostSearchableFields)
+    // .filterByCategories();
 
     const result = await posts.modelQuery
         .populate('categoryId')
@@ -31,6 +32,23 @@ const getSinglePostById = async (id: string) => {
     const result = await PostModel.findById(id)
         .populate('categoryId')
         .populate("userId");
+    return result;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const updatePostById = async (id: string, payload: any) => {
+    console.log(id, payload)
+    const post = await PostModel.findById(id);
+
+    if (!post) {
+        throw new AppError(httpStatus.NOT_FOUND, "No post found!");
+    }
+
+    const result = await PostModel.findByIdAndUpdate(
+        id,
+        { ...payload },
+        { new: true }
+    )
     return result;
 }
 
@@ -57,7 +75,9 @@ const toggleUpVote = async (postId: string, userId: string) => {
         // If the user has upvoted, remove their vote (Unvote)
         updatedPost = await PostModel.findByIdAndUpdate(
             postId,
-            { $pull: { upVote: userObjectId } },
+            {
+                $pull: { upVote: userObjectId },
+            },
             { new: true }
         );
     } else {
@@ -67,6 +87,10 @@ const toggleUpVote = async (postId: string, userId: string) => {
             { $addToSet: { upVote: userObjectId } },
             { new: true }
         );
+    }
+    if (updatedPost) {
+        updatedPost.upVoteSize = updatedPost.upVote.length;
+        await updatedPost.save();
     }
 
     return updatedPost;
@@ -120,4 +144,5 @@ export const postServices = {
     toggleUpVote,
     toggleDownVote,
     deletePostPermanently,
+    updatePostById,
 }

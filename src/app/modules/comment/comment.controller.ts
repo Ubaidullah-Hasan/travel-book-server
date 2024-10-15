@@ -28,7 +28,7 @@ const getAllComment = catchAsync(async (req, res) => {
 });
 
 const getAllCommentOfPost = catchAsync(async (req, res) => {
-    const {postId} = req.params;
+    const {postId} = req.params; 
     const users = await commentServices.getAllCommentOfPostById(postId);
 
     sendResponse(res, {

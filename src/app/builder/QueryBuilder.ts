@@ -20,9 +20,9 @@ export class QueryBuilder<T> {
     this.modelQuery = this.modelQuery.find({
       $or: searchableFields.map(
         (field) =>
-          ({
-            [field]: new RegExp(searchTerm, 'i'),
-          } as FilterQuery<T>)
+        ({
+          [field]: new RegExp(searchTerm, 'i'),
+        } as FilterQuery<T>)
       ),
     });
     return this;
@@ -30,7 +30,7 @@ export class QueryBuilder<T> {
   paginate() {
     let limit: number = Number(this.query?.limit || 10);
 
-    let skip: number = 0; 
+    let skip: number = 0;
 
     if (this.query?.page) {
       const page: number = Number(this.query?.page || 1);
@@ -41,7 +41,10 @@ export class QueryBuilder<T> {
 
     return this;
   }
+
+
   sort() {
+    
     let sortBy = '-createdAt';
 
     if (this.query?.sortBy) {
@@ -51,6 +54,8 @@ export class QueryBuilder<T> {
     this.modelQuery = this.modelQuery.sort(sortBy);
     return this;
   }
+
+
   fields() {
     let fields = ''; // which fields want to be displayed
 
@@ -61,6 +66,26 @@ export class QueryBuilder<T> {
     this.modelQuery = this.modelQuery.select(fields);
     return this;
   }
+
+  // filterByCategories() {
+
+  //   const selectedCategories = this?.query?.selectedCategories as string[]; // Ensure it's treated as an array
+  //   if (Array.isArray(selectedCategories)) {
+  //     const filterEmpty = selectedCategories.filter(item => item !== ""); // Filter out empty strings
+
+  //     if (filterEmpty.length > 0) {
+  //       const selectedCategoryIds: mongoose.Types.ObjectId[] = filterEmpty.map(cat => new mongoose.Types.ObjectId(cat.trim()));
+
+  //       if (selectedCategoryIds.length > 0) {
+  //         this.modelQuery = this.modelQuery.find(
+  //           { userId: { $in: selectedCategoryIds } }
+  //         );
+  //       }
+  //     }
+  //   }
+
+  //   return this;
+  // }
 
   filter() {
     const queryObj = { ...this.query };

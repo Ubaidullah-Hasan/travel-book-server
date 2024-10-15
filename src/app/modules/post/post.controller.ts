@@ -39,6 +39,19 @@ const getSinglePost = catchAsync(async (req, res) => {
     });
 });
 
+const updatePostById = catchAsync(async (req, res) => {
+    const { postId } = req.params;
+    const payload = req.body;
+    const users = await postServices.updatePostById(postId, payload);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Post Update Successfully',
+        data: users,
+    });
+});
+
 const getUserPosts = catchAsync(async (req, res) => {
     const {id} = req.params;
     const users = await postServices.getUserPostsById(id);
@@ -101,4 +114,5 @@ export const postController = {
     toggleUpVote,
     toggleDownVote,
     deletePostPermanently,
+    updatePostById,
 }

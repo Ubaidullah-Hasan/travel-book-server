@@ -12,6 +12,13 @@ router.post("/",
     validateRequest(postValidation.createPostValidationSchema),
     postController.createPost
 )
+
+router.patch("/:postId",
+    auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+    validateRequest(postValidation.updatePostValidationSchema),
+    postController.updatePostById
+)
+
 router.get("/", 
     postController.getAllPost
 )

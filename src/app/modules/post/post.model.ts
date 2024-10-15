@@ -8,7 +8,7 @@ const PostSchema = new Schema<TPost>({
         ref: 'User',
     },
     categoryId: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         required: true,
         ref: 'Category',
     },
@@ -35,6 +35,9 @@ const PostSchema = new Schema<TPost>({
         ref: 'User',
         default: []
     }],
+    upVoteSize: {
+        type: Number,
+    },
     downVote: [{
         type: mongoose.Types.ObjectId,
         ref: 'User',
