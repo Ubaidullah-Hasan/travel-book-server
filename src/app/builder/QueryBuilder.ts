@@ -68,6 +68,7 @@ export class QueryBuilder<T> {
   }
 
   filter() {
+    // pass exact field name which have in my model, it can be filter depend on this filter
     const queryObj = { ...this.query };
     const excludeFields = ['searchTerm', 'page', 'limit', 'sortBy', 'fields'];
 
