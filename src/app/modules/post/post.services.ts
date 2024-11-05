@@ -19,7 +19,6 @@ const getAllPost = async (query: Record<string, unknown>) => {
         .sort()
         .filter()
         .search(PostSearchableFields)
-        // .filterByCategories();
 
     const result = await posts.modelQuery
         .populate('categoryId')
@@ -37,7 +36,6 @@ const getSinglePostById = async (id: string) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const updatePostById = async (id: string, payload: any) => {
-    console.log(id, payload)
     const post = await PostModel.findById(id);
 
     if (!post) {
