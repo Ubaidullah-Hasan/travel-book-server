@@ -1,4 +1,4 @@
-# Travel Share Book - Client
+# Travel Share Book - Server
 
 ## Introduction
 
