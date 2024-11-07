@@ -185,7 +185,6 @@ const deleteUser = async (id: string) => {
 
 const editUserRole = async (id: string, role: string) => {
     const user = await UserModel.findById(id);
-    console.log({role, id});
 
     if (!user) {
         throw new AppError(httpStatus.NOT_FOUND, "User does not exist!");

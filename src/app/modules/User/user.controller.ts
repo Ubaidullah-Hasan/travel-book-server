@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync";
 import { UserServices } from "./user.services";
@@ -107,7 +105,7 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
 
 const editUser = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const {role} = req.body;
+    const { role } = req.body;
 
     const result = await UserServices.editUserRole(id, role);
 
