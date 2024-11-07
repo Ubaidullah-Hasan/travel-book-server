@@ -2,7 +2,7 @@
 import httpStatus from "http-status";
 import { QueryBuilder } from "../../builder/QueryBuilder";
 import AppError from "../../errors/AppError";
-import { UserSearchableFields } from "./user.constant";
+import { USER_STATUS, UserSearchableFields } from "./user.constant";
 import { TUser } from "./user.interface";
 import { UserModel } from "./user.model";
 import mongoose from "mongoose";
@@ -129,7 +129,7 @@ const premiumUser = async (userId: string, payload: any) => {
         throw new AppError(httpStatus.NOT_FOUND, "User not found");
     }
 
-    if(user?.isVerified){
+    if (user?.isVerified) {
         throw new AppError(httpStatus.NOT_FOUND, "User already verified!");
     }
 
@@ -157,12 +157,31 @@ const premiumUser = async (userId: string, payload: any) => {
             cus_email: user.email,
             cus_phone: user?.mobileNumber || "01401635894",
         }
-        
+
         result = await createPayment(paymentInfo);
     }
 
     return result;
 }
+
+const deleteUser = async (id: string) => {
+    const user = await UserModel.findById(id);
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, "User does not exist");
+    }
+
+    if (user?.isDeleted === true) {
+        throw new AppError(httpStatus.BAD_REQUEST, "User already deleted!");
+    }
+
+    const result = await UserModel.findByIdAndUpdate(id,
+        {
+            status: USER_STATUS.BLOCKED,
+            isDeleted: true,
+        }
+    );
+    return result;
+};
 
 export const UserServices = {
     createUser,
@@ -172,4 +191,5 @@ export const UserServices = {
     toggleFollowing,
     getUserFollowingAndFollowers,
     premiumUser,
+    deleteUser,
 };

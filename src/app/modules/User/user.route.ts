@@ -14,6 +14,7 @@ router.post(
 )
 router.get(
     '/',
+    auth(USER_ROLE.ADMIN),
     userController.getAllUsers
 )
 
@@ -46,6 +47,12 @@ router.get(
     '/user-follow/:userId',
     auth(USER_ROLE.ADMIN, USER_ROLE.USER),
     userController.getUserFollowingAndFollowers
+)
+
+router.patch(
+    '/:id',
+    auth(USER_ROLE.ADMIN),
+    userController.deleteUser
 )
 
 export const userRoutes = router;

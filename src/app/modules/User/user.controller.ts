@@ -56,7 +56,7 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
 });
 
 const followingUser = catchAsync(async (req: Request, res: Response) => {
-    const {userId, followingId} = req.body;
+    const { userId, followingId } = req.body;
 
     const result = await UserServices.toggleFollowing(followingId, userId);
     sendResponse(res, {
@@ -68,10 +68,10 @@ const followingUser = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getUserFollowingAndFollowers = catchAsync(async (req: Request, res: Response) => {
-    const {userId} = req.params;
+    const { userId } = req.params;
 
     const followData = await UserServices.getUserFollowingAndFollowers(userId);
-    
+
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -92,6 +92,19 @@ const premiumUser = catchAsync(async (req, res) => {
     });
 });
 
+const deleteUser = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    await UserServices.deleteUser(id);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "User deleted successfully!",
+        data: null,
+    })
+});
+
 export const userController = {
     createUser,
     getSingleUser,
@@ -100,4 +113,5 @@ export const userController = {
     followingUser,
     getUserFollowingAndFollowers,
     premiumUser,
+    deleteUser,
 }
