@@ -5,6 +5,7 @@ import { categoryRoutes } from "../modules/category/category.route";
 import { commentRoutes } from "../modules/comment/comment.route";
 import { postRoutes } from "../modules/post/post.route";
 import { paymentRoutes } from "../modules/payment/payment.route";
+import { sendMessageRouter } from "../modules/contact";
 
 const router = Router();
 const modulesRoutes = [
@@ -31,6 +32,10 @@ const modulesRoutes = [
     {
         path: "/payments",
         route: paymentRoutes,
+    },
+    {
+        path: "/contact-messages",
+        route: sendMessageRouter,
     },
 ];
 
