@@ -183,6 +183,28 @@ const deleteUser = async (id: string) => {
     return result;
 };
 
+const editUserRole = async (id: string, role: string) => {
+    const user = await UserModel.findById(id);
+    console.log({role, id});
+
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, "User does not exist!");
+    }
+
+    if (user?.isDeleted === true) {
+        throw new AppError(httpStatus.BAD_REQUEST, "User already deleted!");
+    }
+
+    const result = await UserModel.findByIdAndUpdate(id,
+        {
+            role
+        },
+        { new: true }
+    );
+
+    return result;
+};
+
 export const UserServices = {
     createUser,
     getSingleUserFromDB,
@@ -192,4 +214,5 @@ export const UserServices = {
     getUserFollowingAndFollowers,
     premiumUser,
     deleteUser,
+    editUserRole,
 };

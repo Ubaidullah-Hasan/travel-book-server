@@ -105,6 +105,20 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
     })
 });
 
+const editUser = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const {role} = req.body;
+
+    const result = await UserServices.editUserRole(id, role);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "User edited successfully!",
+        data: result,
+    })
+});
+
 export const userController = {
     createUser,
     getSingleUser,
@@ -114,4 +128,5 @@ export const userController = {
     getUserFollowingAndFollowers,
     premiumUser,
     deleteUser,
+    editUser,
 }
