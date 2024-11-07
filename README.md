@@ -51,8 +51,8 @@ JWT_ACCESS_SECRET="Your secret key"
 JWT_REFRESH_SECRET="Your secret key"
 JWT_ACCESS_EXPIRES_IN=1d
 JWT_REFRESH_EXPIRES_IN=365d
-EMAIL_USER=hm2964133@gmail.com
-EMAIL_PASS=pigb kqnp wyhn unuy
+EMAIL_USER="your email address"
+EMAIL_PASS="your email password"
  
 # payments
 PAYMENT_URL='https://sandbox.aamarpay.com/jsonpost.php' 
