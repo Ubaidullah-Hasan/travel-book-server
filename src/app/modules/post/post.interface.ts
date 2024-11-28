@@ -1,6 +1,6 @@
-import mongoose, { ObjectId } from "mongoose"
+import mongoose, { Document, ObjectId } from "mongoose"
 
-export type TPost = {
+export interface TPost extends Document {
     _id: ObjectId;
     userId: ObjectId;
     title: string;
@@ -11,4 +11,5 @@ export type TPost = {
     downVote: mongoose.Types.ObjectId[];
     isPremium: boolean;
     upVoteSize: number;
+    sharedForm: ObjectId;
 }

@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 import { postServices } from "./post.services";
 
 const createPost = catchAsync(async (req: Request, res: Response) => {
-    const payload = req.body; 
+    const payload = req.body;
 
     const result = await postServices.createPostIntoDB(payload);
     sendResponse(res, {
@@ -28,7 +28,7 @@ const getAllPost = catchAsync(async (req, res) => {
 });
 
 const getSinglePost = catchAsync(async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     const users = await postServices.getSinglePostById(id);
 
     sendResponse(res, {
@@ -53,7 +53,7 @@ const updatePostById = catchAsync(async (req, res) => {
 });
 
 const getUserPosts = catchAsync(async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     const users = await postServices.getUserPostsById(id);
 
     sendResponse(res, {
@@ -67,7 +67,7 @@ const getUserPosts = catchAsync(async (req, res) => {
 
 const toggleUpVote = catchAsync(async (req, res) => {
     const { postId } = req.params;
-    const {userId} = req.body;
+    const { userId } = req.body;
     const users = await postServices.toggleUpVote(postId, userId);
 
     sendResponse(res, {
@@ -80,7 +80,7 @@ const toggleUpVote = catchAsync(async (req, res) => {
 
 const toggleDownVote = catchAsync(async (req, res) => {
     const { postId } = req.params;
-    const {userId} = req.body;
+    const { userId } = req.body;
     const users = await postServices.toggleDownVote(postId, userId);
 
     sendResponse(res, {
@@ -104,6 +104,19 @@ const deletePostPermanently = catchAsync(async (req, res) => {
 });
 
 
+const sharePost = catchAsync(async (req: Request, res: Response) => {
+    const { postId } = req.params;
+    const payload = req.body;
+
+    const result = await postServices.sharePostIntoDB(postId, payload);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Post shared successfully!",
+        data: result
+    })
+});
+
 
 
 export const postController = {
@@ -115,4 +128,5 @@ export const postController = {
     toggleDownVote,
     deletePostPermanently,
     updatePostById,
+    sharePost,
 }

@@ -9,12 +9,11 @@ const PostSchema = new Schema<TPost>({
     },
     categoryId: {
         type: mongoose.Types.ObjectId,
-        required: true,
         ref: 'Category',
     },
     title: {
         type: String,
-        required: true,
+        default: '',
     },
     description: {
         type: String,
@@ -46,6 +45,11 @@ const PostSchema = new Schema<TPost>({
     isPremium: {
         type: Boolean
     },
+    sharedForm: {
+        type: mongoose.Types.ObjectId,
+        ref: "Post",
+        default: "",
+    }
 }, {
     timestamps: true,
 });

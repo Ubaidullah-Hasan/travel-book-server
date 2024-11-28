@@ -40,6 +40,7 @@ const getSingleUserFromDB = async (id: string) => {
 
 const updateUser = async (email: string, payload: TUser) => {
     const user = await UserModel.isUserExistsByEmail(email);
+
     if (!user) {
         throw new AppError(httpStatus.NOT_FOUND, "User does not exist");
     }
@@ -157,7 +158,6 @@ const premiumUser = async (userId: string, payload: any) => {
             cus_email: user.email,
             cus_phone: user?.mobileNumber || "01401635894",
         }
-
         result = await createPayment(paymentInfo);
     }
 

@@ -20,6 +20,24 @@ const createPostValidationSchema = z.object({
         upVoteSize: z.number().default(0),
         downVote: z.array(objectIdSchema).default([]),
         isPremium: z.boolean({message: "Is premium is required!"}),
+        sharedForm: z.string({message: "It contain objectId!"}).optional().default("")
+    })
+});
+
+const sharePostValidationSchema = z.object({
+    body: z.object({
+        userId: z.string().nonempty({ message: "User ID is required" }),
+        description: z.string().min(1, { message: "Description is required" }),
+        images: z
+            .array(z.string().url({ message: "Each image must be a valid URL" }))
+            .optional()
+            .refine((val) => val === undefined || val.length === 0 || val.length > 0, {
+                message: "At least one image is required if provided",
+            }),
+        upVote: z.array(objectIdSchema).default([]),
+        upVoteSize: z.number().default(0),
+        downVote: z.array(objectIdSchema).default([]),
+        isPremium: z.boolean({ message: "Is premium is required!" }),
     })
 });
 
@@ -52,4 +70,5 @@ export const postValidation = {
     createPostValidationSchema,
     updatePostValidationSchema,
     updateVoteSchema,
+    sharePostValidationSchema,
 }

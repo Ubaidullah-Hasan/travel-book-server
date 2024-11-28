@@ -39,7 +39,6 @@ router.patch(
 router.patch(
     '/user-payment/:userId',
     auth(USER_ROLE.ADMIN, USER_ROLE.USER),
-    // validateRequest(userValidation.followingUserValidationSchema),
     userController.premiumUser
 )
 

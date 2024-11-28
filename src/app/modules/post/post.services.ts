@@ -146,6 +146,18 @@ const deletePostPermanently = async (postId: string) => {
     return post;
 }
 
+const sharePostIntoDB = async (postId:string, payload: TPost) => {
+    const postInfo = {
+        userId: payload.userId,
+        description: payload.description,
+        isPremium: payload.isPremium,
+        sharedForm: postId, // orginal post information
+    }
+     
+    const result = await PostModel.create(postInfo);
+    return result;
+}
+
 export const postServices = {
     createPostIntoDB,
     getAllPost,
@@ -155,4 +167,5 @@ export const postServices = {
     toggleDownVote,
     deletePostPermanently,
     updatePostById,
+    sharePostIntoDB,
 }

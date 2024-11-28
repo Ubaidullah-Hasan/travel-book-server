@@ -47,4 +47,10 @@ router.delete("/:postId",
     postController.deletePostPermanently
 )
 
+router.post("/:postId/share",
+    auth(USER_ROLE.ADMIN, USER_ROLE.USER),
+    validateRequest(postValidation.sharePostValidationSchema),
+    postController.sharePost
+)
+
 export const postRoutes = router;
