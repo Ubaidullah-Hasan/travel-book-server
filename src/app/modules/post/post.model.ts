@@ -17,7 +17,6 @@ const PostSchema = new Schema<TPost>({
     },
     description: {
         type: String,
-        required: true,
     },
     images: {
         type: [String],

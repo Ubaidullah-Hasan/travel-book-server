@@ -149,7 +149,7 @@ const deletePostPermanently = async (postId: string) => {
 const sharePostIntoDB = async (postId:string, payload: TPost) => {
     const postInfo = {
         userId: payload.userId,
-        description: payload.description,
+        // description: payload.description,
         isPremium: payload.isPremium,
         sharedForm: postId, // orginal post information
     }

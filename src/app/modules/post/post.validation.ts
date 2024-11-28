@@ -27,7 +27,7 @@ const createPostValidationSchema = z.object({
 const sharePostValidationSchema = z.object({
     body: z.object({
         userId: z.string().nonempty({ message: "User ID is required" }),
-        description: z.string().min(1, { message: "Description is required" }),
+        description: z.string().min(1, { message: "Description is required" }).optional(),
         images: z
             .array(z.string().url({ message: "Each image must be a valid URL" }))
             .optional()
